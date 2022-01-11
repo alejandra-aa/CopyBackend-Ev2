@@ -1,5 +1,17 @@
-FROM adoptopenjdk/openjdk11:ubi
+FROM openjdk:11-oracle
+
+COPY . .
+
+RUN chmod +x ./gradlew
+
+RUN ./gradlew build
+
+COPY . .
+
+COPY docker-entrypoint.sh /
+
+RUN chmod +x docker-entrypoint.sh
+
+ENTRYPOINT ["bash", "docker-entrypoint.sh"]
+
 EXPOSE 8081
-RUN mkdir -p /app/
-ADD build/libs/demo-docker-0.0.1-SNAPSHOT.jar /app/demo-docker-0.0.1-SNAPSHOT.jar
-ENTRYPOINT ["java", "-jar", "/app/demo-docker-0.0.1-SNAPSHOT.jar"]
